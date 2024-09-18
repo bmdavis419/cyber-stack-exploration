@@ -1,0 +1,44 @@
+{
+	"name": "cyber-stack-explore",
+	"author": {
+		"name": "Ben Davis",
+		"url": "https://twitter.com/bmdavis419"
+	},
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"dev": "vite dev",
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio",
+		"format": "prettier --write .",
+		"lint": "prettier --check .",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-vercel": "^5.4.4",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.6",
+		"autoprefixer": "^10.4.20",
+		"drizzle-kit": "^0.24.2",
+		"lucia": "^3.2.0",
+		"postcss": "^8.4.47",
+		"prettier": "^3.1.1",
+		"prettier-plugin-svelte": "^3.1.2",
+		"svelte": "^5.0.0-next.1",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^3.4.12",
+		"typescript": "^5.0.0",
+		"vite": "^5.0.3"
+	},
+	"type": "module",
+	"dependencies": {
+		"@libsql/client": "^0.12.0",
+		"@lucia-auth/adapter-drizzle": "^1.1.0",
+		"arctic": "^1.9.2",
+		"dotenv": "^16.4.5",
+		"drizzle-orm": "^0.33.0"
+	}
+}
