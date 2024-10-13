@@ -1,7 +1,5 @@
 <script lang="ts">
 	const { data } = $props();
-
-	$inspect(data.user);
 </script>
 
 <h1 class="text-3xl font-bold underline">Welcome to the Cyber Stack</h1>

@@ -1,12 +1,12 @@
 import { OAuth2RequestError } from 'arctic';
-import { generateIdFromEntropySize } from 'lucia';
-import { lucia } from '$lib/server/auth';
 import { github } from '$lib/server/auth/github';
 import { db } from '$lib/server/db';
 import { and, eq } from 'drizzle-orm';
 import { userTable } from '$lib/server/db/schema';
 
 import type { RequestEvent } from '@sveltejs/kit';
+import { createSession, generateSessionToken } from '$lib/server/auth/sessions';
+import { setSessionTokenCookie } from '$lib/server/auth/cookies';
 
 export async function GET(event: RequestEvent): Promise<Response> {
 	const code = event.url.searchParams.get('code');
@@ -36,12 +36,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		});
 
 		if (existingUser) {
-			const session = await lucia.createSession(existingUser.id, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes
-			});
+			const sessionToken = generateSessionToken();
+			const session = await createSession(sessionToken, existingUser.id);
+			setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		} else {
 			const githubEmailResponse = await fetch('https://api.github.com/user/emails', {
 				headers: {
@@ -57,21 +54,24 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				throw new Error('No email found from API...');
 			}
 
-			const userId = generateIdFromEntropySize(10); // 16 characters long
+			const nUser = await db
+				.insert(userTable)
+				.values({
+					provider: 'github',
+					providerId: githubUser.id.toString(),
+					email: primaryEmail.email
+				})
+				.returning({ insertedId: userTable.id });
 
-			await db.insert(userTable).values({
-				id: userId,
-				provider: 'github',
-				providerId: githubUser.id.toString(),
-				email: primaryEmail.email
-			});
+			if (nUser.length === 0) {
+				throw new Error('Failed to insert user...');
+			}
 
-			const session = await lucia.createSession(userId, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
-				...sessionCookie.attributes
-			});
+			const userId = nUser[0].insertedId;
+
+			const sessionToken = generateSessionToken();
+			const session = await createSession(sessionToken, userId);
+			setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		}
 		return new Response(null, {
 			status: 302,
