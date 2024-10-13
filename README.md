@@ -61,10 +61,12 @@ This is an example codebase setup with the following:
 
 ### Auth
 
+**NOTE: this has been updated to work without lucia**
+
 - Auth backbone (not counting using it on a page) touches the following files:
-  - `src/lib/server/auth/index.ts`
+  - `src/lib/server/auth/cookies.ts`
+  - `src/lib/server/auth/sessions.ts`
   - `src/lib/server/auth/github.ts`
-  - `src/lib/server/db/auth.ts`
   - `src/routes/auth/callback/github/+server.ts`
   - `src/routes/auth/login/github/+server.ts`
   - `src/routes/auth/logout/+server.ts`
@@ -72,9 +74,9 @@ This is an example codebase setup with the following:
   - `src/hooks.server.ts`
 - Main thing that would need to be very modular is the drizzle db adapter, but that just lives in the `src/lib/server/db/auth.ts` file and can be easily switched based on the chosen DB
 - Packages:
-  - @lucia-auth/adapter-drizzle
+  - @oslojs/crypto
+  - @oslojs/encoding
   - arctic
-  - lucia (dev)
 
 ### DB
 
