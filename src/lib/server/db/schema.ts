@@ -1,4 +1,4 @@
-import { generateRandomString, type RandomReader } from '@oslojs/crypto/random';
+import { randomUUID } from 'crypto';
 import { text, integer, sqliteTable, index } from 'drizzle-orm/sqlite-core';
 
 export const userTable = sqliteTable(
@@ -7,13 +7,7 @@ export const userTable = sqliteTable(
 		id: text('id')
 			.primaryKey()
 			.$defaultFn(() => {
-				const random: RandomReader = {
-					read(bytes: Uint8Array): void {
-						crypto.getRandomValues(bytes);
-					}
-				};
-				const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-				return generateRandomString(random, alphabet, 64);
+				return randomUUID();
 			}),
 		email: text('email').notNull(),
 		provider: text('provider', {
