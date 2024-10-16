@@ -90,6 +90,19 @@ This is an example codebase setup with the following:
   - @libsql/client
   - drizzle-kit (dev)
 
+**POSTGRES RAW**
+
+- Packages:
+  - drizzle-orm
+  - drizzle-kit (dev)
+  - pg
+  - @types/pg (dev)
+- The main change here is the fact that we are using migrations instead of pushes
+- HOW TO SETUP THE LOCAL
+  - Create a docker image of a local postgres instance
+  - Connect to it with: `psql postgresql://postgres:postgres@localhost:5432`
+  - Create a new database with `CREATE DATABASE cyber_explore`
+
 ### DEPLOY
 
 - Vercel is the deployment provider here, very simple to use

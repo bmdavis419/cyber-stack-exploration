@@ -10,9 +10,13 @@
 		"build": "vite build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev": "vite dev",
 		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
+		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
+		"dev": "vite dev",
+		"dev:sst": "sst dev",
+		"sso": "aws sso login --sso-session=blok",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",
 		"preview": "vite preview"
@@ -21,8 +25,9 @@
 		"@sveltejs/adapter-vercel": "^5.4.5",
 		"@sveltejs/kit": "^2.7.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.8",
+		"@types/pg": "^8.11.10",
 		"autoprefixer": "^10.4.20",
-		"drizzle-kit": "^0.24.2",
+		"drizzle-kit": "^0.26.2",
 		"postcss": "^8.4.47",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.7",
@@ -39,6 +44,9 @@
 		"@oslojs/encoding": "^1.1.0",
 		"arctic": "^1.9.2",
 		"dotenv": "^16.4.5",
-		"drizzle-orm": "^0.33.0"
+		"drizzle-orm": "^0.35.1",
+		"pg": "^8.13.0",
+		"sst": "3.2.31",
+		"svelte-kit-sst": "2.43.5"
 	}
 }

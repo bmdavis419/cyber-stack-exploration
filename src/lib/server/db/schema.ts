@@ -1,20 +1,18 @@
-import { randomUUID } from 'crypto';
-import { text, integer, sqliteTable, index } from 'drizzle-orm/sqlite-core';
+import { relations } from 'drizzle-orm';
+import { text, pgTable, index, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const userTable = sqliteTable(
+export const userTable = pgTable(
 	'user',
 	{
-		id: text('id')
-			.primaryKey()
-			.$defaultFn(() => {
-				return randomUUID();
-			}),
+		id: uuid('id').primaryKey().defaultRandom(),
 		email: text('email').notNull(),
 		provider: text('provider', {
 			enum: ['github']
 		}).notNull(),
 		providerId: text('provider_id').notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' })
+		createdAt: timestamp('created_at', {
+			withTimezone: true
+		})
 			.notNull()
 			.$defaultFn(() => new Date())
 	},
@@ -25,12 +23,27 @@ export const userTable = sqliteTable(
 	}
 );
 
-export const sessionTable = sqliteTable('session', {
+export const userRelations = relations(userTable, ({ many }) => {
+	return {
+		sessions: many(sessionTable)
+	};
+});
+
+export const sessionTable = pgTable('session', {
 	id: text('id').primaryKey(),
-	userId: text('user_id')
+	userId: uuid('user_id')
 		.notNull()
 		.references(() => userTable.id),
-	expiresAt: integer('expires_at', {
-		mode: 'timestamp'
+	expiresAt: timestamp('expires_at', {
+		withTimezone: true
 	}).notNull()
+});
+
+export const sessionRelations = relations(sessionTable, ({ one }) => {
+	return {
+		user: one(userTable, {
+			fields: [sessionTable.userId],
+			references: [userTable.id]
+		})
+	};
 });
