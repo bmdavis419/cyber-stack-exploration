@@ -1,36 +1,12 @@
-import { randomUUID } from 'crypto';
-import { text, integer, sqliteTable, index } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-export const userTable = sqliteTable(
-	'user',
+export const profileTable = pgTable(
+	"user",
 	{
-		id: text('id')
-			.primaryKey()
-			.$defaultFn(() => {
-				return randomUUID();
-			}),
-		email: text('email').notNull(),
-		provider: text('provider', {
-			enum: ['github']
-		}).notNull(),
-		providerId: text('provider_id').notNull(),
-		createdAt: integer('created_at', { mode: 'timestamp' })
+		id: uuid("id").primaryKey(),
+		email: text("email").notNull(),
+		createdAt: timestamp("created_at", { withTimezone: true })
 			.notNull()
-			.$defaultFn(() => new Date())
+			.$defaultFn(() => new Date()),
 	},
-	(table) => {
-		return {
-			providerIndex: index('provider_index').on(table.provider, table.providerId)
-		};
-	}
 );
-
-export const sessionTable = sqliteTable('session', {
-	id: text('id').primaryKey(),
-	userId: text('user_id')
-		.notNull()
-		.references(() => userTable.id),
-	expiresAt: integer('expires_at', {
-		mode: 'timestamp'
-	}).notNull()
-});
