@@ -1,12 +1,14 @@
-import { defineConfig } from 'drizzle-kit';
-import 'dotenv/config';
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-	dialect: 'sqlite',
-	schema: './src/lib/server/db/schema.ts',
-	driver: 'turso',
+	dialect: "postgresql",
+	schema: "./src/lib/server/db/schema.ts",
+	out: "./supabase/migrations",
 	dbCredentials: {
-		url: process.env.DATABASE_URL ?? 'file:local.db',
-		authToken: process.env.DATABASE_AUTH_TOKEN ?? 'N/A'
-	}
+		host: "localhost",
+		port: 54321,
+		user: "postgres",
+		password: "postgres",
+		database: "supabase",
+	},
 });

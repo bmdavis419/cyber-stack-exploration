@@ -11,7 +11,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
-		"db:push": "drizzle-kit push",
+		"db:generate": "drizzle-kit generate",
 		"db:studio": "drizzle-kit studio",
 		"format": "prettier --write .",
 		"lint": "prettier --check .",

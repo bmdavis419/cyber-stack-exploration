@@ -1,22 +1,15 @@
-import { deleteSessionTokenCookie } from '$lib/server/auth/cookies.js';
-import { invalidateSession } from '$lib/server/auth/sessions.js';
-import { error } from '@sveltejs/kit';
+import { getOrCreateUserProfile } from "$lib/server/auth/index.js";
 
 export const load = async ({ locals }) => {
-	const { user } = locals;
+	const profile = await getOrCreateUserProfile(locals);
 
-	return { user };
+	return { profile };
 };
 
 export const actions = {
 	logout: async (event) => {
-		const { session } = event.locals;
-		if (!session) {
-			error(401);
-		}
-
-		await Promise.all([deleteSessionTokenCookie(event), invalidateSession(session.id)]);
+		await event.locals.supabase.auth.signOut();
 
 		return { success: true };
-	}
+	},
 };

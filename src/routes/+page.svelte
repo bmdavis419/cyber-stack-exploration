@@ -11,8 +11,8 @@
 
 <p class="italic">This is very exploratory right now, if you have ideas let me know!</p>
 
-{#if data.user}
-	<h3 class="text-lg font-semibold">Welcome {data.user.email}</h3>
+{#if data.profile}
+	<h3 class="text-lg font-semibold">Welcome {data.profile.email}</h3>
 
 	<form
 		method="post"
