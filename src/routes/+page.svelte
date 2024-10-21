@@ -16,7 +16,7 @@
 
 	<form
 		method="post"
-		action="?/logout"
+		action="?/logout
 		use:enhance={() => {
 			isLoggingOut = true;
 			return async () => {
